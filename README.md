@@ -13,5 +13,5 @@ $ pip install -r requirements.txt
 
 ## License 
 
-Blogya is distributed under the MIT license.
+Chess is distributed under the MIT license.
 
