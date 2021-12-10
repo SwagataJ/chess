@@ -1,15 +1,16 @@
 from flask import Flask, render_template
+
 from chess_engine import *
 
 app = Flask(__name__)
 
 
-@app.route('/')
+@app.route("/")
 def index():
     return render_template("index.html")
 
 
-@app.route('/move/<int:depth>/<path:fen>/')
+@app.route("/move/<int:depth>/<path:fen>/")
 def get_move(depth, fen):
     print(depth)
     print("Calculating...")
@@ -20,6 +21,6 @@ def get_move(depth, fen):
     return move
 
 
-@app.route('/test/<string:tester>')
+@app.route("/test/<string:tester>")
 def test_get(tester):
     return tester
