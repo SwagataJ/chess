@@ -30,6 +30,40 @@ let onDrop = function (source, target) {
     getResponseMove();
 };
 
+let onMouseoverSquare = function(square, piece) {
+    let moves = game.moves({
+        square: square,
+        verbose: true
+    });
+
+    if (moves.length === 0) return;
+
+    greySquare(square);
+
+    for (let i = 0; i < moves.length; i++) {
+        greySquare(moves[i].to);
+    }
+};
+
+let onMouseoutSquare = function(square, piece) {
+    removeGreySquares();
+};
+
+let removeGreySquares = function() {
+    $('#board .square-55d63').css('background', '');
+};
+
+let greySquare = function(square) {
+    let squareEl = $('#board .square-' + square);
+
+    let background = '#a9a9a9';
+    if (squareEl.hasClass('black-3c85d') === true) {
+        background = '#696969';
+    }
+
+    squareEl.css('background', background);
+};
+
 // update the board position after the piece snap
 // for castling, en passant, pawn promotion
 let onSnapEnd = function() {
@@ -79,6 +113,8 @@ let cfg = {
   position: 'start',
   onDragStart: onDragStart,
   onDrop: onDrop,
+  onMouseoutSquare: onMouseoutSquare,
+  onMouseoverSquare: onMouseoverSquare,
   onSnapEnd: onSnapEnd
 };
 
