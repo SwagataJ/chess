@@ -15,7 +15,7 @@ let onDragStart = function (source, piece, position, orientation) {
     }
 };
 
-let onDrop = function (source, target) {
+let onDrop = function (source, target, piece) {
     // see if the move is legal
     let move = game.move({
         from: source,
@@ -85,7 +85,18 @@ let updateStatus = function() {
 
   // draw?
   else if (game.in_draw() === true) {
-    status = 'Game over, drawn position';
+      if(game.in_threefold_repetition() === true){
+          status = 'Game over, threefold repetition';
+      }
+      else if (game.insufficient_material() === true){
+          status = 'Game over, insufficient material';
+      }
+      else if (game.in_stalemate() === true){
+          status = 'Game over, stalemate';
+      }
+      else{
+          status = 'Game over, drawn position';
+      }
   }
 
   // game still on
@@ -118,19 +129,19 @@ let cfg = {
   onSnapEnd: onSnapEnd
 };
 
-let randomResponse = function() {
-    fen = game.fen()
+/*let randomResponse = function() {
+    let fen = game.fen()
     $.get($SCRIPT_ROOT + "/move/" + fen, function(data) {
         game.move(data, {sloppy: true});
         // board.position(game.fen());
         updateStatus();
     })
-}
+}*/
 
 let getResponseMove = function() {
     let e = document.getElementById("sel1");
     let depth = e.options[e.selectedIndex].value;
-    fen = game.fen()
+    let fen = game.fen()
     $.get($SCRIPT_ROOT + "/move/" + depth + "/" + fen, function(data) {
         game.move(data, {sloppy: true});
         updateStatus();
@@ -149,11 +160,11 @@ setTimeout(function() {
 }, 0);
 
 
-let setPGN = function() {
+/*let setPGN = function() {
   let table = document.getElementById("pgn");
   let pgn = game.pgn().split(" ");
   let move = pgn[pgn.length - 1];
-}
+}*/
 
 let createTable = function() {
 
@@ -214,14 +225,14 @@ let newGame = function() {
     updateStatus();
 }
 
-let getCapturedPieces = function() {
+/*let getCapturedPieces = function() {
     let history = game.history({ verbose: true });
     for (let i = 0; i < history.length; i++) {
         if ("captured" in history[i]) {
             console.log(history[i]["captured"]);
         }
     }
-}
+}*/
 
 let getLastCapture = function() {
     let history = game.history({ verbose: true });
